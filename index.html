@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Control léxico-gramatical · 4 curso</title>
+<meta name="description" content="Лексико-граматична контрольна робота з іспанської мови · 4 курс · A2–B1.1 · Берегова О. А.">
+<meta property="og:title" content="Control léxico-gramatical · 4 curso">
+<meta property="og:description" content="Лексико-граматична контрольна робота з іспанської мови · 4 курс · A2–B1.1 · Берегова О. А.">
+<meta property="og:image" content="og-image.jpg">
+<meta name="theme-color" content="#C8203F">
+<link rel="icon" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@600;700&display=swap">
+<style>
+:root{
+  --bg:#F3F7FB; --paper:#FFFFFF; --ink:#18202C; --muted:#5A6678; --line:#D6E2EE;
+  --red:#C8203F; --red-soft:#FBE3E8; --ice:#DCEAF7; --ice-deep:#B3D1ED;
+  --ok:#1C8A57; --ok-soft:#DDF3E8; --warn:#B86E00; --warn-soft:#FDF0DA;
+  --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --f-body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:17px/1.55 var(--f-body);padding-bottom:env(safe-area-inset-bottom,0px);-webkit-text-size-adjust:100%}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--ice-deep);outline-offset:2px}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px}
+header.top{background:var(--paper);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;gap:12px;padding-top:12px;padding-bottom:12px}
+.logo{width:40px;height:40px;border-radius:50%;flex:none;object-fit:cover}
+.brand{font:700 13px/1.2 var(--f-mono);color:var(--red);letter-spacing:.04em}
+.brand small{display:block;color:var(--muted);font:400 13px/1.3 var(--f-body);letter-spacing:0}
+h1{font:800 clamp(26px,5vw,36px)/1.1 var(--f-display);margin:28px 0 6px;letter-spacing:-.01em}
+h1 em{font-style:normal;color:var(--red)}
+.lead{color:var(--muted);margin:0 0 22px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:20px;margin:0 0 16px}
+label.f{display:block;font-weight:600;margin:0 0 6px}
+input.t,textarea.t{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:11px 12px;background:#fff;font-size:18px}
+input.t:focus,textarea.t:focus{border-color:var(--ice-deep);outline:none;box-shadow:0 0 0 3px var(--ice)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:560px){.row2{grid-template-columns:1fr}}
+.vars{display:flex;gap:8px;flex-wrap:wrap}
+.vars label{flex:1 1 70px;border:1.5px solid var(--line);border-radius:10px;padding:10px;text-align:center;font-weight:700;cursor:pointer;background:#fff}
+.vars input{position:absolute;opacity:0;pointer-events:none}
+.vars label:has(input:checked){border-color:var(--red);background:var(--red-soft);color:var(--red)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;padding:13px 22px;font-weight:700;font-size:17px;background:var(--red);color:#fff;min-height:48px}
+.btn:hover{filter:brightness(1.06)}
+.btn.sec{background:var(--ice);color:var(--ink)}
+.btn.wide{width:100%}
+.btn[disabled]{opacity:.5;cursor:default}
+.err{color:var(--red);font-weight:600;min-height:1.4em;margin:10px 0 0}
+details.acc{border-top:1px solid var(--line);padding:10px 0}
+details.acc:first-of-type{border-top:0}
+details.acc summary{font-weight:700;cursor:pointer}
+table.ct{width:100%;border-collapse:collapse;margin:10px 0 4px;font-size:15px}
+table.ct th,table.ct td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+table.ct th{background:var(--ice);font-weight:700}
+table.ct td:last-child,table.ct th:last-child{text-align:right;white-space:nowrap}
+table.ct tr.tot td{font-weight:700;background:var(--red-soft)}
+ul.rules{margin:8px 0 0;padding-left:20px}
+ul.rules li{margin:4px 0}
+/* test */
+.thead{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:1px solid var(--line)}
+.thead .wrap{display:flex;align-items:center;gap:12px;padding-top:10px;padding-bottom:10px}
+.thead .t{flex:1;min-width:0;font-weight:700;font-size:15px;line-height:1.25}
+.thead .t small{display:block;font-weight:400;color:var(--muted)}
+.total{font:700 14px var(--f-mono);color:var(--muted);text-align:right;white-space:nowrap}
+.bar{height:5px;background:var(--ice)}
+.bar i{display:block;height:100%;background:var(--red);transition:width .25s linear}
+.qwrap{padding-top:22px}
+.qmeta{display:flex;justify-content:space-between;align-items:center;margin:0 0 12px;gap:10px}
+.pill{font:700 13px var(--f-mono);background:var(--ice);border-radius:99px;padding:5px 11px}
+.clock{font:700 26px var(--f-mono);color:var(--ink);min-width:86px;text-align:right}
+.clock.warn{color:var(--warn)}
+.clock.danger{color:var(--red)}
+.instr{color:var(--muted);font-size:15px;margin:0 0 12px}
+.q{font-size:21px;line-height:1.5;margin:0 0 6px}
+.q input.gap{display:inline-block;width:auto;min-width:150px;max-width:100%;border:0;border-bottom:2px solid var(--red);border-radius:0;padding:2px 6px;font-size:20px;background:var(--red-soft);margin:2px 2px}
+.q input.gap:focus{outline:none;background:#fff;box-shadow:0 2px 0 var(--red)}
+.ua{font-size:22px;font-weight:600;margin:0 0 14px}
+.ua .flag{font:700 12px var(--f-mono);color:var(--muted);display:block;margin-bottom:4px}
+.opts{display:grid;gap:10px;margin-top:14px}
+.opt{display:flex;align-items:center;gap:12px;border:1.5px solid var(--line);border-radius:12px;padding:13px 14px;background:#fff;text-align:left;font-size:19px;width:100%}
+.opt b{font:700 14px var(--f-mono);color:var(--muted);width:22px}
+.opt.on{border-color:var(--red);background:var(--red-soft)}
+.keys{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 0}
+.keys button{min-width:44px;min-height:44px;border:1.5px solid var(--line);border-radius:10px;background:#fff;font-size:19px;font-weight:600;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+.keys button:active{background:var(--ice)}
+.nav{display:flex;justify-content:flex-end;align-items:center;gap:12px;margin:22px 0 40px}
+.nav .hint{flex:1;color:var(--muted);font-size:14px}
+.intro h2{font:800 28px/1.15 var(--f-display);margin:0 0 6px}
+.intro .num{font:700 14px var(--f-mono);color:var(--red);letter-spacing:.06em}
+.intro p{margin:8px 0}
+/* results */
+.score{display:flex;gap:12px;flex-wrap:wrap;margin:6px 0 4px}
+.score div{flex:1 1 150px;background:var(--ice);border-radius:12px;padding:12px 14px}
+.score b{display:block;font:800 30px var(--f-display)}
+.score span{font-size:14px;color:var(--muted)}
+.it{border-top:1px solid var(--line);padding:9px 0;font-size:16px}
+.it .m{font:700 13px var(--f-mono);margin-right:6px}
+.it.ok .m{color:var(--ok)} .it.half .m{color:var(--warn)} .it.no .m{color:var(--red)} .it.rev .m{color:var(--muted)}
+.it .you{color:var(--muted)}
+.it .key{color:var(--ok);font-weight:600}
+.status{border-radius:12px;padding:12px 14px;margin:0 0 12px;font-weight:600}
+.status.ok{background:var(--ok-soft);color:var(--ok)}
+.status.wait{background:var(--warn-soft);color:var(--warn)}
+.status.bad{background:var(--red-soft);color:var(--red)}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+@media print{
+  header.top,.thead,.btns,.status{display:none!important}
+  body{background:#fff}
+  .card{border:0;padding:0}
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+/* ===== CONFIG ===== */
+const CONFIG = {
+  FORM_URL: 'https://formspree.io/f/xaqarvll', // куди надходять роботи
+  SHOW_KEY: true,      // true — після здачі студент бачить правильні відповіді
+  INTRO_SEC: 15,       // секунд на екран-заставку перед кожним завданням
+  GUARD_MS: 800,       // захист від подвійного натискання
+};
+const META={"store": "lgc4_2026_10", "title": "Control léxico-gramatical", "sub": "La sanidad · Los pronombres", "course": "4 курс", "level": "A2–B1.1", "group": "4 англ", "short": "LG-4curso"};
+// Лексико-граматична контрольна · 4 курс · A2–B1.1
+// Джерела: «El sistema sanitario en España», «La epidemia crónica de México», «Los pronombres personales de complemento»
+const PARTS = [
+  { id:'P1', type:'gap',  sec:40, pts:2, art:true,
+    title:'Léxico I · La sanidad y la salud',
+    instr:'Complete la frase con una sola palabra. Escríbala usted mismo/a.' },
+  { id:'P2', type:'tr',   sec:40, pts:2, art:true,
+    title:'Léxico II · Expresiones',
+    instr:'Traduzca la expresión al español.' },
+  { id:'P3', type:'gap',  sec:40, pts:2,
+    title:'Gramática I · Condicional simple y compuesto',
+    instr:'Ponga el verbo entre paréntesis en condicional simple o compuesto. Si el verbo es pronominal (quedarse), escriba también el pronombre.' },
+  { id:'P4', type:'mc',   sec:30, pts:2,
+    title:'Gramática II · Futuro y condicional de probabilidad',
+    instr:'Elija la forma correcta.' },
+  { id:'P5', type:'mc',   sec:30, pts:2,
+    title:'Gramática III · Los pronombres',
+    instr:'Elija la opción correcta.' },
+  { id:'P6', type:'tf',   sec:60, pts:2,
+    title:'Gramática IV · Dos pronombres',
+    instr:'Sustituya los complementos entre corchetes por pronombres y escriba la frase completa.' },
+  { id:'P7', type:'free', sec:90, pts:5,
+    title:'Traducción',
+    instr:'Traduzca la frase al español.' },
+];
+
+const V = {
+1: {
+  P1: [
+    { q:'En España la sanidad pública se financia con los ___ de los ciudadanos.', a:['impuestos'] },
+    { q:'Mi médico de ___ me ha enviado al especialista de cardiología.', a:['cabecera','familia'] },
+    { q:'Una operación no urgente puede tardar meses: hay una larga lista de ___.', a:['espera'] },
+    { q:'Durante los primeros seis meses el seguro no cubre este tratamiento: es el periodo de ___.', a:['carencia'] },
+    { q:'Antes de firmar el seguro, lea con atención todas las condiciones de la ___.', a:['póliza'] },
+    { q:'Durante el ___ mucha gente tenía que quedarse en casa y trabajaba desde allí.', a:['confinamiento'] },
+    { q:'En Navidad comí muchísimo y ___ de peso: ¡tres kilos más!', a:['subí','aumenté'] },
+    { q:'La obesidad es un factor de ___ para la diabetes y la hipertensión.', a:['riesgo'] },
+  ],
+  P2: [
+    { q:'записатися на прийом', a:['pedir cita','pedir cita previa','pedir una cita','pedir hora'] },
+    { q:'медичний персонал', a:['el personal sanitario','el personal médico'] },
+    { q:'оформити медичну страховку', a:['contratar un seguro médico','contratar un seguro de salud','contratar un seguro','contratar el seguro médico','hacerse un seguro médico','hacerse un seguro'] },
+    { q:'зателефонувати на 112', a:['llamar al 112'] },
+    { q:'харчові звички', a:['los hábitos alimenticios','los hábitos alimentarios'] },
+    { q:'набирати вагу, гладшати', a:['subir de peso','engordar','ganar peso','aumentar de peso'] },
+  ],
+  P3: [
+    { q:'Yo en tu lugar (ir) ___ al médico hoy mismo.', a:['iría'] },
+    { q:'¿(Poder) ___ usted darme cita para el martes?', a:['podría'] },
+    { q:'Con más médicos no (haber) ___ listas de espera tan largas.', a:['habría'] },
+    { q:'La enfermera dijo que los resultados (estar) ___ listos el lunes.', a:['estarían'] },
+    { q:'Ayer tuviste fiebre y fuiste a clase. Yo que tú (quedarse) ___ en casa.', a:['me habría quedado'] },
+    { q:'Con un seguro privado, el año pasado mis padres no (esperar) ___ tanto.', a:['habrían esperado'] },
+    { q:'¡Qué pena! Me (gustar) ___ ver al especialista, pero la consulta ya estaba cerrada.', a:['habría gustado','me habría gustado'] },
+    { q:'Sin tu ayuda, ayer yo no (encontrar) ___ el hospital.', a:['habría encontrado'] },
+  ],
+  P4: [
+    { q:'—¿Dónde está el doctor Gil? —No sé, ___ en el quirófano.', o:['estará','estaría','habrá estado'], c:0 },
+    { q:'—Ayer Ana no vino a clase. —___ enferma.', o:['Esté','Estaría','Estuviera'], c:1 },
+    { q:'—Hay una ambulancia delante de la casa. —___ algo grave.', o:['Habrá pasado','Habría pasado','Pasaría'], c:0 },
+    { q:'—¿Qué hora es? —No tengo reloj; ___ las cinco.', o:['serán','serían','habrán sido'], c:0 },
+    { q:'Cuando llegamos, la consulta ya estaba cerrada: la doctora ___ antes.', o:['se habrá ido','se habría ido','se irá'], c:1 },
+    { q:'«Probablemente tiene gripe» = ___ gripe.', o:['Tendrá','Tendría','Habrá tenido'], c:0 },
+  ],
+  P5: [
+    { q:'A mi abuela ___ acompaño al médico.', o:['le','la','se'], c:1 },
+    { q:'Al camarero ___ dejamos una buena propina.', o:['lo','le','la'], c:1 },
+    { q:'El informe a los clientes: ___ envié ayer.', o:['se los','les lo','se lo'], c:2 },
+    { q:'___ ha olvidado la tarjeta sanitaria.', o:['Me se','Se me','Se mi'], c:1 },
+    { q:'A mis padres ___ interesa mucho la política.', o:['los','les','se'], c:1 },
+    { q:'¡No ___! (tú: decir eso a ella)', o:['díselo','se lo digas','se lo dices'], c:1 },
+    { q:'Hay que ___ hoy. (pedir la cita)', o:['pedirla','la pedir','pedírla'], c:0 },
+    { q:'¿Vienes ___ al centro de salud?', o:['con mí','conmigo','con yo'], c:1 },
+  ],
+  P6: [
+    { q:'Devolví [el dinero] [a mi hermano].', a:['se lo devolví'] },
+    { q:'El médico nos explicó [el tratamiento].', a:['el médico nos lo explicó','nos lo explicó'] },
+    { q:'Tengo que decir [la verdad] [a Ana].', a:['tengo que decírsela','se la tengo que decir'] },
+    { q:'¡Da [la receta] [a tu abuela]!', a:['dásela'] },
+  ],
+  P7: [
+    { q:'Я б на твоєму місці записався до лікаря сьогодні.', m:'Yo en tu lugar (Yo que tú) pediría cita con el médico hoy.' },
+    { q:'Зі страховкою ми б (тоді) не чекали так довго.', m:'Con un seguro no habríamos esperado tanto.' },
+    { q:'Лікар, мабуть, робить обхід.', m:'El médico estará pasando visita.' },
+    { q:'Я забула (так вийшло) картку пацієнта вдома.', m:'Se me olvidó (Se me ha olvidado) la tarjeta sanitaria en casa.' },
+  ],
+},
+2: {
+  P1: [
+    { q:'La sanidad pública española es ___: atiende a todas las personas que viven en el país.', a:['universal'] },
+    { q:'Solo pagamos una parte del precio de los medicamentos con receta: es el ___.', a:['copago'] },
+    { q:'Para recibir asistencia en el centro de salud, necesitas la tarjeta ___.', a:['sanitaria'] },
+    { q:'El médico de familia me ha dado un ___ (направлення) para el especialista.', a:['volante'] },
+    { q:'En el ___ médico de mi aseguradora hay más de cien clínicas y médicos.', a:['cuadro'] },
+    { q:'Claudia estaba nerviosa y empezó a comer entre ___.', a:['horas'] },
+    { q:'Después de la covid, Alejandra tiene ___ respiratorias: se cansa enseguida.', a:['secuelas','dificultades'] },
+    { q:'Si quieres ___ de peso, come menos dulces y haz deporte.', a:['bajar'] },
+  ],
+  P2: [
+    { q:'державна медицина', a:['la sanidad pública','la medicina pública'] },
+    { q:'сімейний лікар', a:['el médico de cabecera','el médico de familia'] },
+    { q:'страхова компанія', a:['la aseguradora','la compañía de seguros','la compañía aseguradora'] },
+    { q:'направити до спеціаліста', a:['derivar al especialista','derivar a un especialista','enviar al especialista','enviar a un especialista'] },
+    { q:'надмірна вага', a:['el sobrepeso','el exceso de peso'] },
+    { q:'перекушувати між прийомами їжі', a:['comer entre horas','picar entre horas','comer entre comidas','picar entre comidas'] },
+  ],
+  P3: [
+    { q:'Yo que tú (pedir) ___ una segunda opinión.', a:['pediría'] },
+    { q:'Vosotros (deber) ___ vacunaros contra la gripe.', a:['deberíais'] },
+    { q:'A mí me (gustar) ___ trabajar en un hospital público.', a:['gustaría','me gustaría'] },
+    { q:'El médico dijo que (venir) ___ a las diez.', a:['vendría'] },
+    { q:'Ya firmaste el contrato… Yo que tú (leer) ___ la póliza antes de firmar.', a:['habría leído'] },
+    { q:'Con la tarjeta sanitaria, el mes pasado Oksana no (pagar) ___ la factura del hospital.', a:['habría pagado'] },
+    { q:'Ayer Oksana no llamó a la aseguradora. ¿Tú qué (hacer) ___ en su lugar?', a:['habrías hecho'] },
+    { q:'La aseguradora prometió que para enero ya (resolver) ___ el caso.', a:['habría resuelto','resolvería'] },
+  ],
+  P4: [
+    { q:'—Tu hermano no contesta al teléfono. —___ en la consulta del dentista.', o:['Estará','Estaría','Estuvo'], c:0 },
+    { q:'—¿Cuántos pacientes atendió ayer la doctora? —___ a unos treinta.', o:['Atenderá','Atendería','Atendiera'], c:1 },
+    { q:'—Ana tiene muy buena cara hoy. —___ bien.', o:['Habrá dormido','Habría dormido','Dormiría'], c:0 },
+    { q:'«Seguramente había mucha gente en la sala de espera» = ___ mucha gente en la sala de espera.', o:['Habrá','Habría','Habrá habido'], c:1 },
+    { q:'«Supongo que la enfermera ya se ha ido a casa» = La enfermera ya ___ a casa.', o:['se irá','se habrá ido','se habría ido'], c:1 },
+    { q:'«Supongo que Oksana no había leído la póliza» = Oksana no ___ la póliza.', o:['habrá leído','leería','habría leído'], c:2 },
+  ],
+  P5: [
+    { q:'A la enfermera ___ pregunté el horario.', o:['la','le','lo'], c:1 },
+    { q:'—¿Es médica tu madre? —Sí, ___ es.', o:['la','lo','le'], c:1 },
+    { q:'—¿Le pediste el volante al médico? —Sí, ___ pedí.', o:['se la','le lo','se lo'], c:2 },
+    { q:'A Ana ___ cayeron las gafas.', o:['se la','se le','le se'], c:1 },
+    { q:'—No me gusta esperar. —A mí ___. (acuerdo)', o:['también','tampoco','sí'], c:1 },
+    { q:'___, por favor. (usted: dar la receta a mí)', o:['Démela','Deme la','Me la dé'], c:0 },
+    { q:'Vi a los niños jugar → ___ vi jugar.', o:['Les','Los','Se'], c:1 },
+    { q:'Esa película ya ___ he visto.', o:['la','— (nada)','le'], c:0 },
+  ],
+  P6: [
+    { q:'Mandé [la invitación] [a los profesores].', a:['se la mandé'] },
+    { q:'¿Me prestas [tus apuntes]?', a:['me los prestas'] },
+    { q:'Voy a enviar [el informe] [a los clientes].', a:['voy a enviárselo','se lo voy a enviar'] },
+    { q:'¡No digas [la noticia] [a tus padres]!', a:['no se la digas'] },
+  ],
+  P7: [
+    { q:'Чи не могли б ви сказати, де поліклініка?', m:'¿Podría (usted) decirme dónde está el centro de salud?' },
+    { q:'Мені хотілося б поговорити з лікарем, але він уже пішов (так і не вдалося).', m:'Me habría gustado hablar con el médico, pero ya se había ido.' },
+    { q:'— Котра година? — Мабуть, десь дев’ята.', m:'—¿Qué hora es? —Serán las nueve.' },
+    { q:'Ліки? Я їх йому вже купила.', m:'¿Los medicamentos (Las medicinas)? Ya se los (se las) he comprado.' },
+  ],
+},
+3: {
+  P1: [
+    { q:'Cada comunidad ___ gestiona su propio servicio de salud.', a:['autónoma'] },
+    { q:'La atención ___ es el primer nivel del sistema: el centro de salud.', a:['primaria'] },
+    { q:'Los niños van al ___ del centro de salud.', a:['pediatra'] },
+    { q:'Los trabajadores que ___ a la Seguridad Social tienen tarjeta sanitaria.', a:['cotizan'] },
+    { q:'Fui a un médico que no era de mi compañía y después pedí el ___ de gastos.', a:['reembolso'] },
+    { q:'Los productos industriales con mucho azúcar, sal o grasa son alimentos ___.', a:['ultraprocesados','procesados'] },
+    { q:'En los envases hay un etiquetado de ___: octágonos negros «Alto en».', a:['advertencia'] },
+    { q:'Comer verdura todos los días es uno de los mejores hábitos ___.', a:['alimenticios','alimentarios','saludables','sanos'] },
+  ],
+  P2: [
+    { q:'приватна медицина', a:['la sanidad privada','la medicina privada'] },
+    { q:'список очікування (на операцію)', a:['la lista de espera'] },
+    { q:'страхове покриття', a:['la cobertura','la cobertura del seguro'] },
+    { q:'рахунок (до сплати)', a:['la factura'] },
+    { q:'фактор ризику', a:['el factor de riesgo'] },
+    { q:'худнути', a:['bajar de peso','adelgazar','perder peso'] },
+  ],
+  P3: [
+    { q:'Nosotros nunca (cambiar) ___ la sanidad pública por la privada.', a:['cambiaríamos'] },
+    { q:'¿(Tener) ___ usted una cita libre esta semana?', a:['tendría'] },
+    { q:'Yo nunca (decir) ___ que la sanidad privada es mejor.', a:['diría'] },
+    { q:'Marta nos dijo que (contratar) ___ un seguro privado.', a:['contrataría'] },
+    { q:'Nosotros (llamar) ___ al 112, pero no teníamos cobertura en el móvil.', a:['habríamos llamado'] },
+    { q:'Con un seguro dental, el año pasado nosotros (ahorrar) ___ mucho dinero.', a:['habríamos ahorrado'] },
+    { q:'Sin la ayuda de Inés, el año pasado Oksana no (resolver) ___ el problema tan rápido.', a:['habría resuelto'] },
+    { q:'Dijeron que para el viernes ya (hacer) ___ los análisis.', a:['habrían hecho'] },
+  ],
+  P4: [
+    { q:'«Me imagino que la doctora sabe inglés» = La doctora ___ inglés.', o:['sabrá','sabría','habrá sabido'], c:0 },
+    { q:'«Probablemente el paciente tenía unos setenta años» = El paciente ___ unos setenta años.', o:['tendrá','tendría','habrá tenido'], c:1 },
+    { q:'«Probablemente la ambulancia ya ha llegado» = La ambulancia ya ___.', o:['llegará','habrá llegado','habría llegado'], c:1 },
+    { q:'—No encuentro mi tarjeta sanitaria. —La ___ en casa.', o:['habrás dejado','habrías dejado','dejarás'], c:0 },
+    { q:'«Probablemente el médico ya había salido cuando llegamos» = El médico ya ___ cuando llegamos.', o:['habrá salido','habría salido','saldría'], c:1 },
+    { q:'—¿Por qué no vino la doctora la semana pasada? —___ un congreso.', o:['Tendrá','Tendría','Tuviera'], c:1 },
+  ],
+  P5: [
+    { q:'A Pablo ___ llamo mañana.', o:['lo','la','les'], c:0 },
+    { q:'A Marta ___ robaron el móvil en el autobús.', o:['la','le','se'], c:1 },
+    { q:'¿Las recetas? ___ he dado a mi abuela.', o:['Se las','Les las','Se los'], c:0 },
+    { q:'___ ha roto el termómetro.', o:['Nos se','Se nos','Se nosotros'], c:1 },
+    { q:'A nosotros no ___ apetece salir.', o:['nos','os','nuestro'], c:0 },
+    { q:'___, chicos, ya son las ocho. (vosotros: levantarse)', o:['Levantados','Levantaos','Levantaros'], c:1 },
+    { q:'Le hice firmar el contrato → ___ hice firmar.', o:['Se lo','Le lo','Lo le'], c:0 },
+    { q:'Entre ___ y yo no hay secretos.', o:['ti','tú','te'], c:1 },
+  ],
+  P6: [
+    { q:'Regalaron [unas flores] [a la abuela].', a:['se las regalaron'] },
+    { q:'Te he dejado [las llaves] en la mesa.', a:['te las he dejado en la mesa'] },
+    { q:'Estoy explicando [el problema] [a mis padres].', a:['estoy explicándoselo','se lo estoy explicando'] },
+    { q:'¡Compra [el pan] [a la vecina]!', a:['cómpraselo'] },
+  ],
+  P7: [
+    { q:'Лікар сказав, що аналізи будуть готові в понеділок.', m:'El médico dijo que los análisis estarían listos el lunes.' },
+    { q:'Я б на твоєму місці (тоді) прочитав поліс.', m:'Yo en tu lugar (Yo que tú) habría leído la póliza.' },
+    { q:'Їй тоді, мабуть, було років двадцять.', m:'Entonces tendría unos veinte años.' },
+    { q:'У мене зламався телефон (так вийшло), тому я не викликала швидку.', m:'Se me rompió el móvil; por eso no llamé a una ambulancia (no pedí una ambulancia / no llamé al 112).' },
+  ],
+},
+4: {
+  P1: [
+    { q:'En la sanidad pública la consulta en el centro de salud es ___ para el paciente.', a:['gratuita','gratis'] },
+    { q:'Muchas familias ___ un seguro privado para que las atiendan antes.', a:['contratan','tienen','pagan'] },
+    { q:'Este hospital está ___ con varias aseguradoras.', a:['concertado'] },
+    { q:'Se torció el tobillo jugando al voleibol y fue a ___ del hospital.', a:['urgencias'] },
+    { q:'En algunas zonas ___ (≠ urbanas) faltan médicos.', a:['rurales'] },
+    { q:'La ___ de vida en España es una de las más altas del mundo.', a:['esperanza'] },
+    { q:'Un dulce reduce el estrés un momento, pero después otra vez tenemos ganas de comer: es un círculo ___.', a:['vicioso'] },
+    { q:'Durante la pandemia muchos mexicanos ___: ganaron 8,5 kilos de media.', a:['engordaron'] },
+  ],
+  P2: [
+    { q:'якість медичного обслуговування', a:['la calidad asistencial','la calidad de la asistencia','la calidad de la atención médica'] },
+    { q:'первинна медична допомога', a:['la atención primaria'] },
+    { q:'застрахована особа', a:['el asegurado','la asegurada'] },
+    { q:'медичний висновок', a:['el informe médico'] },
+    { q:'ожиріння', a:['la obesidad'] },
+    { q:'ультраоброблені продукти', a:['los alimentos ultraprocesados','los productos ultraprocesados'] },
+  ],
+  P3: [
+    { q:'Con un dolor de espalda tan fuerte, yo tampoco (esperar) ___ tres meses.', a:['esperaría'] },
+    { q:'Yo (querer) ___ hablar con la enfermera, por favor.', a:['querría'] },
+    { q:'Mis abuelos no (saber) ___ pedir cita por internet sin ayuda.', a:['sabrían'] },
+    { q:'El especialista le dijo que (tener) ___ que operarse.', a:['tendría'] },
+    { q:'Ayer os dolía mucho la pierna y no hicisteis nada. Yo en vuestro lugar (ir) ___ directamente a urgencias.', a:['habría ido'] },
+    { q:'Con una simple llamada, el año pasado el seguro (cubrir) ___ todos los gastos.', a:['habría cubierto'] },
+    { q:'Yo que tú no (tomar) ___ antibióticos sin receta la semana pasada.', a:['habría tomado'] },
+    { q:'Me (gustar) ___ conocer antes las condiciones del seguro, pero nadie me las explicó.', a:['habría gustado','me habría gustado'] },
+  ],
+  P4: [
+    { q:'«A lo mejor hay mucha gente en urgencias» = ___ mucha gente en urgencias.', o:['Habrá','Habría','Hay'], c:0 },
+    { q:'«Seguramente eran las tres cuando llegó la ambulancia» = ___ las tres cuando llegó la ambulancia.', o:['Serán','Serían','Habrán sido'], c:1 },
+    { q:'—Un hombre sale del hospital con muletas. —___ la pierna.', o:['Se habrá roto','Se habría roto','Se romperá'], c:0 },
+    { q:'«Supongo que el seguro cuesta unos 50 euros al mes» = El seguro ___ unos 50 euros al mes.', o:['costará','costaría','habrá costado'], c:0 },
+    { q:'«A lo mejor el abuelo no oyó el teléfono» = El abuelo no ___ el teléfono.', o:['oirá','oiría','oyera'], c:1 },
+    { q:'«Supongo que Marta había pedido cita antes» = Marta ___ cita antes.', o:['habrá pedido','habría pedido','pediría'], c:1 },
+  ],
+  P5: [
+    { q:'A mis padres ___ espero en la estación.', o:['les','los','se'], c:1 },
+    { q:'A los niños ___ encantan los dibujos animados.', o:['los','les','se'], c:1 },
+    { q:'¿El dinero? Ya ___ he devuelto a mi hermano.', o:['se lo','le lo','se los'], c:0 },
+    { q:'¿___ ha olvidado la contraseña?', o:['Te se','Se te','Se ti'], c:1 },
+    { q:'Tú ___ a mi madre. (gustar)', o:['gustas','le gustas','te gusta'], c:1 },
+    { q:'No ___. (vosotros: preocuparse)', o:['preocupaos','os preocupéis','os preocupáis'], c:1 },
+    { q:'___. (nosotros: decir la verdad a ella)', o:['Digámossela','Digámosela','Digamosela'], c:1 },
+    { q:'Lucía siempre lleva el paraguas ___.', o:['con sí','consigo','con ella misma'], c:1 },
+  ],
+  P6: [
+    { q:'Contamos [la noticia] [a nuestros padres].', a:['se la contamos'] },
+    { q:'El camarero nos trajo [la cuenta].', a:['el camarero nos la trajo','nos la trajo'] },
+    { q:'Quiero pedir [una cita] [a la doctora].', a:['quiero pedírsela','se la quiero pedir'] },
+    { q:'¡Ponga [la venda] [al paciente]! (usted)', a:['póngasela'] },
+  ],
+  P7: [
+    { q:'Що б ти зробив на моєму місці?', m:'¿Qué harías (tú) en mi lugar?' },
+    { q:'Без твоєї допомоги ми б (тоді) не знайшли лікарню.', m:'Sin tu ayuda no habríamos encontrado el hospital.' },
+    { q:'Вони, напевно, вже отримали результати.', m:'Ya habrán recibido los resultados.' },
+    { q:'Під час карантину вона набрала п’ять кілограмів, і їй важко схуднути.', m:'Durante el confinamiento subió (de peso) cinco kilos / engordó cinco kilos y le cuesta bajar de peso (adelgazar).' },
+  ],
+},
+};
+if (typeof module !== 'undefined') module.exports = { PARTS, V };
+
+/* ===== ENGINE ===== */
+(function(){
+const $=s=>document.querySelector(s);
+const app=$('#app');
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmt=ms=>{const s=Math.max(0,Math.ceil(ms/1000));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};
+const LET='abcdefgh';
+const store={get(){try{return JSON.parse(localStorage.getItem(META.store)||'null')}catch(e){return null}},
+  set(v){try{localStorage.setItem(META.store,JSON.stringify(v))}catch(e){}},
+  clear(){try{localStorage.removeItem(META.store)}catch(e){}}};
+if(/[?&]reset=1/.test(location.search)){store.clear();history.replaceState(null,'',location.pathname)}
+
+function buildSteps(v){const out=[];PARTS.forEach((p,pi)=>{out.push({k:'intro',p:pi,sec:CONFIG.INTRO_SEC});
+  V[v][p.id].forEach((it,ii)=>out.push({k:'q',p:pi,i:ii,sec:p.sec}))});return out}
+const maxOf=p=>V[1][p.id].length*p.pts;
+const AUTO_MAX=PARTS.filter(p=>p.type!=='free').reduce((a,p)=>a+maxOf(p),0);
+const FREE_MAX=PARTS.filter(p=>p.type==='free').reduce((a,p)=>a+maxOf(p),0);
+
+let st=null, steps=[], timer=null, shownAt=0, armed=0, lastField=null;
+
+function log(msg){const d=new Date();st.journal.push(d.toTimeString().slice(0,8)+' '+msg);save()}
+function save(){store.set(st)}
+
+/* ---------- start ---------- */
+function startScreen(){
+  const rows=PARTS.map((p,i)=>`<tr><td>${i+1}. ${esc(p.title)} (${V[1][p.id].length} × ${p.pts})</td><td>${maxOf(p)}</td></tr>`).join('');
+  const total=steps0().reduce((a,s)=>a+s.sec,0);
+  const tim=PARTS.map((p,i)=>`<tr><td>${i+1}. ${esc(p.title)}</td><td>${V[1][p.id].length} × ${p.sec} с</td></tr>`).join('');
+  app.innerHTML=`
+  <header class="top"><div class="wrap"><img class="logo" src="favicon.png" alt="" onerror="this.remove()"><div class="brand">@eduproberegova<small>Берегова Ольга, к.філол.н., доцент</small></div></div></header>
+  <main class="wrap">
+    <h1>${esc(META.title)}<br><em>${esc(META.sub)}</em></h1>
+    <p class="lead">${esc(META.course)} · Español ${esc(META.level)} · близько ${Math.round(total/60)} хвилин</p>
+    <section class="card">
+      <label class="f" for="nm">Прізвище та ім’я</label>
+      <input class="t" id="nm" autocomplete="name" placeholder="Прізвище Ім’я">
+      <div class="row2" style="margin-top:14px">
+        <div><label class="f" for="gr">Група</label><input class="t" id="gr" value="${esc(META.group)}"></div>
+        <div><span class="f" style="display:block;font-weight:600;margin:0 0 6px">Варіант</span>
+          <div class="vars">${[1,2,3,4].map(n=>`<label><input type="radio" name="v" id="v${n}" value="${n}">${n}</label>`).join('')}</div></div>
+      </div>
+      <p class="err" id="err"></p>
+      <button class="btn wide" id="go">Почати контрольну</button>
+    </section>
+    <section class="card">
+      <details class="acc" open><summary>Як проходить контрольна</summary>
+        <ul class="rules">
+          <li>Одне питання на екрані. Повернутися до попереднього питання не можна.</li>
+          <li>На кожне питання свій час. Коли він закінчується, програма сама переходить далі й зберігає те, що ви встигли написати.</li>
+          <li>Слова пишете самі, без підказок. Для літер á, é, í, ó, ú, ñ, ü, ¿, ¡ під полем є кнопки.</li>
+          <li>Не оновлюйте сторінку і не закривайте її: таймер іде далі.</li>
+          <li>Наприкінці робота автоматично надсилається викладачу. Дочекайтеся повідомлення «Enviado».</li>
+        </ul>
+      </details>
+      <details class="acc"><summary>Структура і бали</summary>
+        <table class="ct"><thead><tr><th>Завдання</th><th>Бали</th></tr></thead><tbody>${rows}
+        <tr class="tot"><td>Разом</td><td>${AUTO_MAX+FREE_MAX}</td></tr></tbody></table>
+        <p style="font-size:14px;color:var(--muted);margin:6px 0 0">Завдання 1–${PARTS.length-1} перевіряються автоматично. У завданнях, де ви пишете слово чи форму: правильно з наголосом — повний бал, правильно, але без потрібного наголосу (á, é…) — половина. Переклад (${FREE_MAX} балів) перевіряє викладач: зміст і лексика — 2, граматика — 3 бали за речення.</p>
+      </details>
+      <details class="acc"><summary>Час на завдання</summary>
+        <table class="ct"><tbody>${tim}<tr class="tot"><td>Разом (із заставками)</td><td>${fmt(total*1000)}</td></tr></tbody></table>
+      </details>
+      <details class="acc"><summary>Шкала оцінювання</summary>
+        <table class="ct"><thead><tr><th>Бали</th><th>ECTS</th><th>Оцінка</th></tr></thead><tbody>
+        <tr><td>90–100</td><td>A</td><td>відмінно</td></tr><tr><td>82–89</td><td>B</td><td>добре</td></tr><tr><td>74–81</td><td>C</td><td>добре</td></tr>
+        <tr><td>64–73</td><td>D</td><td>задовільно</td></tr><tr><td>60–63</td><td>E</td><td>задовільно</td></tr><tr><td>35–59</td><td>FX</td><td>незадовільно</td></tr><tr><td>0–34</td><td>F</td><td>незадовільно</td></tr></tbody></table>
+      </details>
+    </section>
+  </main>`;
+  $('#go').onclick=()=>{
+    const nm=$('#nm').value.trim(), gr=$('#gr').value.trim(), vi=document.querySelector('input[name="v"]:checked');
+    if(nm.split(/\s+/).length<2){$('#err').textContent='Впишіть прізвище та ім’я.';return}
+    if(!vi){$('#err').textContent='Оберіть варіант, який назвав викладач.';return}
+    const v=+vi.value;
+    st={name:nm,group:gr,v,idx:0,deadline:0,ans:{},journal:[],hidden:0,started:new Date().toISOString(),finished:false,sent:false};
+    steps=buildSteps(v); st.deadline=Date.now()+steps[0].sec*1000;
+    log(`Inicio · ${nm} · ${gr} · variante ${v} · ${navigator.userAgent}`);
+    run();
+  };
+}
+function steps0(){return buildSteps(1)}
+
+/* ---------- test ---------- */
+function remainingTotal(){let r=Math.max(0,st.deadline-Date.now());for(let i=st.idx+1;i<steps.length;i++)r+=steps[i].sec*1000;return r}
+function run(){
+  // catch up if the page was closed / reloaded
+  while(st.idx<steps.length && Date.now()>st.deadline){
+    log(`Paso ${st.idx+1}: tiempo agotado (página cerrada o recargada)`);
+    st.idx++; if(st.idx<steps.length) st.deadline+=steps[st.idx].sec*1000;
+  }
+  if(st.idx>=steps.length){finish();return}
+  save(); render();
+  clearInterval(timer); timer=setInterval(tick,250); tick();
+}
+function key(s){return PARTS[s.p].id+'.'+(s.i+1)}
+function render(){
+  const s=steps[st.idx], p=PARTS[s.p], n=V[st.v][p.id].length;
+  shownAt=Date.now(); armed=0;
+  const head=`<div class="thead"><div class="wrap"><div class="t">Parte ${s.p+1} / ${PARTS.length} · ${esc(p.title)}<small>${esc(st.name)} · variante ${st.v}</small></div><div class="total" title="Час до кінця">⏱ <span id="tt"></span></div></div><div class="bar"><i id="bar"></i></div></div>`;
+  if(s.k==='intro'){
+    app.innerHTML=head+`<main class="wrap qwrap"><section class="card intro">
+      <div class="num">PARTE ${s.p+1} DE ${PARTS.length}</div><h2>${esc(p.title)}</h2>
+      <p>${esc(p.instr)}</p><p class="instr">${n} ${n===1?'pregunta':'preguntas'} · ${p.sec} segundos cada una · ${maxOf(p)} puntos</p></section>
+      <div class="nav"><span class="hint">Empieza en <b id="cl"></b></span><button class="btn" id="nx">Empezar →</button></div></main>`;
+  } else {
+    const it=V[st.v][p.id][s.i], k=key(s), val=st.ans[k];
+    let body='';
+    if(p.type==='gap'){
+      const parts=it.q.split('___');
+      body=`<p class="q">${esc(parts[0])}<input class="gap" id="in" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" value="${esc(val||'')}" size="${Math.max(10,(it.a[0]||'').length+4)}">${esc(parts.slice(1).join('___'))}</p>`;
+    } else if(p.type==='tr'){
+      body=`<p class="ua"><span class="flag">UA → ES</span>${esc(it.q)}</p><input class="t" id="in" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" value="${esc(val||'')}">`;
+    } else if(p.type==='tf'){
+      body=`<p class="q">${esc(it.q)}</p><input class="t" id="in" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Escriba la frase…" value="${esc(val||'')}">`;
+    } else if(p.type==='free'){
+      body=`<p class="ua"><span class="flag">UA → ES</span>${esc(it.q)}</p><textarea class="t" id="in" rows="3" autocomplete="off" autocapitalize="sentences" autocorrect="off" spellcheck="false">${esc(val||'')}</textarea>`;
+    } else if(p.type==='mc'){
+      body=`<p class="q">${esc(it.q).replace('___','<b style="color:var(--red)">_____</b>')}</p><div class="opts">${it.o.map((o,j)=>`<button class="opt${val===j?' on':''}" data-j="${j}"><b>${LET[j]})</b>${esc(o)}</button>`).join('')}</div>`;
+    }
+    const keys=p.type==='mc'?'':`<div class="keys" id="keys">${['á','é','í','ó','ú','ñ','ü','¿','¡'].map(c=>`<button type="button" tabindex="-1" data-c="${c}">${c}</button>`).join('')}</div>`;
+    const last=st.idx===steps.length-1;
+    app.innerHTML=head+`<main class="wrap qwrap"><section class="card">
+      <div class="qmeta"><span class="pill">${s.i+1} / ${n}</span><span class="clock" id="cl"></span></div>
+      <p class="instr">${esc(p.instr)}</p>${body}${keys}</section>
+      <div class="nav"><span class="hint" id="hint"></span><button class="btn" id="nx">${last?'Terminar':'Siguiente →'}</button></div></main>`;
+    const inp=$('#in');
+    if(inp){
+      lastField=inp;
+      const remember=()=>{st.ans[k]=inp.value;save()};
+      inp.addEventListener('input',remember);
+      inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&p.type!=='free')e.preventDefault()});
+      setTimeout(()=>{try{inp.focus({preventScroll:true});const L=inp.value.length;inp.setSelectionRange(L,L)}catch(e){}},60);
+      const kb=$('#keys');
+      const ins=c=>{const f=lastField; if(!f)return; const a=f.selectionStart??f.value.length, b=f.selectionEnd??a;
+        f.setRangeText(c,a,b,'end'); f.dispatchEvent(new Event('input',{bubbles:true})); try{f.focus({preventScroll:true})}catch(e){}};
+      kb.querySelectorAll('button').forEach(bt=>{
+        bt.addEventListener('pointerdown',e=>{e.preventDefault()});
+        bt.addEventListener('mousedown',e=>{e.preventDefault()});
+        bt.addEventListener('click',e=>{e.preventDefault();ins(bt.dataset.c)});
+      });
+    }
+    app.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+      st.ans[k]=+b.dataset.j; save();
+      app.querySelectorAll('.opt').forEach(x=>x.classList.toggle('on',x===b));
+    });
+  }
+  $('#nx').onclick=onNext;
+}
+function onNext(){
+  if(Date.now()-shownAt<CONFIG.GUARD_MS) return;
+  const s=steps[st.idx], rem=st.deadline-Date.now();
+  if(s.k==='q' && PARTS[s.p].type==='free' && rem>15000 && !(armed && Date.now()-armed<4000)){
+    armed=Date.now(); $('#hint').textContent=`¿Terminar ya? Quedan ${fmt(rem)} · pulse otra vez`; $('#nx').textContent='Sí, siguiente →'; return;
+  }
+  advance('botón');
+}
+function advance(how){
+  const s=steps[st.idx];
+  if(s.k==='q'){const k=key(s),v=st.ans[k];log(`${k} · ${how} · ${v===undefined?'(sin respuesta)':JSON.stringify(v)}`)}
+  else log(`Parte ${s.p+1}: inicio (${how})`);
+  st.idx++;
+  if(st.idx>=steps.length){finish();return}
+  st.deadline=Date.now()+steps[st.idx].sec*1000; save(); render(); tick();
+}
+function tick(){
+  if(!st||st.finished)return;
+  const s=steps[st.idx]; const rem=st.deadline-Date.now();
+  const cl=$('#cl'); if(cl){cl.textContent=fmt(rem); if(cl.classList){cl.classList.toggle('warn',rem<=10000&&rem>5000);cl.classList.toggle('danger',rem<=5000)}}
+  const tt=$('#tt'); if(tt) tt.textContent=fmt(remainingTotal());
+  const bar=$('#bar'); if(bar) bar.style.width=(100*st.idx/steps.length)+'%';
+  if(rem<=0) advance('tiempo');
+}
+document.addEventListener('visibilitychange',()=>{ if(st&&!st.finished){ if(document.hidden){st.hidden++;log('⚠ Salió de la página (otra pestaña o aplicación)')} else log('Volvió a la página') } });
+
+/* ---------- grading ---------- */
+const norm=s=>String(s||'').normalize('NFC').toLowerCase().replace(/[’`´]/g,"'").replace(/[¡!¿?.,;:«»"“”()]/g,' ').replace(/\s+/g,' ').trim();
+const noAcc=s=>s.normalize('NFD').replace(/[̀-ͯ]/g,'');
+const noArt=s=>s.replace(/^(el|la|los|las|un|una|unos|unas) /,'');
+function gradeText(p,given,answers){
+  let g=norm(given); if(!g) return 0;
+  let A=answers.map(norm);
+  if(p.art){g=noArt(g);A=A.map(noArt)}
+  if(A.includes(g)) return p.pts;
+  if(A.map(noAcc).includes(noAcc(g))) return p.pts/2;
+  return 0;
+}
+function grade(){
+  const res=[]; let auto=0; const per={};
+  PARTS.forEach(p=>{per[p.id]=0;
+    V[st.v][p.id].forEach((it,i)=>{const k=p.id+'.'+(i+1), g=st.ans[k]; let pts=null, keyTxt='', you='';
+      if(p.type==='mc'){you=g===undefined?'':LET[g]+') '+it.o[g]; keyTxt=LET[it.c]+') '+it.o[it.c]; pts=g===it.c?p.pts:0}
+      else if(p.type==='free'){you=g||''; keyTxt=it.m}
+      else {you=g||''; keyTxt=it.a.join(' / '); pts=gradeText(p,g,it.a)}
+      if(pts!==null){auto+=pts;per[p.id]+=pts}
+      res.push({k,p,it,you,keyTxt,pts});
+    });
+  });
+  return {res,auto,per};
+}
+function ects(x){return x>=90?'A':x>=82?'B':x>=74?'C':x>=64?'D':x>=60?'E':x>=35?'FX':'F'}
+
+/* ---------- finish & send ---------- */
+function report(g){
+  const L=[];
+  L.push(`${META.title} · ${META.sub} · ${META.course}`);
+  L.push(`Estudiante: ${st.name} · Grupo: ${st.group} · Variante: ${st.v}`);
+  L.push(`Inicio: ${st.started} · Fin: ${st.ended}`);
+  L.push(`Parte automática: ${g.auto} / ${AUTO_MAX} · Traducción: ___ / ${FREE_MAX} (revisa la profesora)`);
+  L.push(`Salidas de la página: ${st.hidden}`);
+  L.push('');
+  PARTS.forEach((p,pi)=>{
+    L.push(`— ${pi+1}. ${p.title}` + (p.type==='free'?` (___ / ${maxOf(p)})`:` (${g.per[p.id]} / ${maxOf(p)})`));
+    g.res.filter(r=>r.p===p).forEach(r=>{
+      const mark=r.pts===null?'[revisar]':r.pts===p.pts?'✓':r.pts>0?'½':'✗';
+      L.push(`${r.k} ${mark}${r.pts===null?'':' ('+r.pts+')'} · ${r.it.q}\n    respuesta: ${r.you||'(vacío)'}\n    ${r.pts===null?'modelo':'correcto'}: ${r.keyTxt}`);
+    });
+    L.push('');
+  });
+  return L.join('\n');
+}
+function finish(){
+  clearInterval(timer);
+  if(!st.finished){st.finished=true; st.ended=new Date().toISOString(); log('Fin de la prueba'); save()}
+  const g=grade(); renderResults(g);
+  if(!st.sent) send(g);
+}
+async function send(g){
+  const box=$('#status'); const set=(c,t)=>{if(box){box.className='status '+c;box.textContent=t}};
+  set('wait','Enviando… No cierre la página.');
+  try{
+    const fd=new FormData();
+    fd.append('_subject',`${META.short} · ${st.name} · V${st.v} · ${g.auto}/${AUTO_MAX}`);
+    fd.append('curso',META.course); fd.append('nombre',st.name); fd.append('grupo',st.group); fd.append('variante',String(st.v));
+    fd.append('puntos_auto',`${g.auto} / ${AUTO_MAX}`); fd.append('salidas_de_pagina',String(st.hidden));
+    fd.append('informe',report(g)); fd.append('diario',st.journal.join('\n'));
+    const r=await fetch(CONFIG.FORM_URL,{method:'POST',body:fd,headers:{Accept:'application/json'}});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    st.sent=true; log('Enviado'); save(); set('ok','✓ Enviado. La profesora ha recibido su trabajo.');
+    const rb=$('#resend'); if(rb) rb.style.display='none';
+  }catch(e){
+    log('Error al enviar: '+e.message); save();
+    set('bad','No se ha podido enviar. Compruebe internet y pulse «Enviar otra vez». Si no funciona, guarde el PDF y envíelo a la profesora.');
+    const rb=$('#resend'); if(rb) rb.style.display='';
+  }
+}
+function renderResults(g){
+  const sc=g.res.map(r=>{
+    const cls=r.pts===null?'rev':r.pts===r.p.pts?'ok':r.pts>0?'half':'no';
+    const mark=r.pts===null?'·':r.pts===r.p.pts?'✓':r.pts>0?'½':'✗';
+    const showKey=CONFIG.SHOW_KEY && (r.pts===null || r.pts<r.p.pts);
+    return `<div class="it ${cls}"><span class="m">${mark} ${r.k}</span>${esc(r.it.q)}<br><span class="you">Su respuesta: ${esc(r.you||'—')}</span>${showKey?`<br><span class="key">${r.pts===null?'Modelo':'Correcto'}: ${esc(r.keyTxt)}</span>`:''}</div>`;
+  }).join('');
+  const perRows=PARTS.map((p,i)=>`<tr><td>${i+1}. ${esc(p.title)}</td><td>${p.type==='free'?'— / '+maxOf(p):g.per[p.id]+' / '+maxOf(p)}</td></tr>`).join('');
+  app.innerHTML=`
+  <header class="top"><div class="wrap"><img class="logo" src="favicon.png" alt="" onerror="this.remove()"><div class="brand">@eduproberegova<small>${esc(META.title)} · ${esc(META.course)}</small></div></div></header>
+  <main class="wrap"><h1>Prueba terminada</h1>
+    <p class="lead">${esc(st.name)} · ${esc(st.group)} · variante ${st.v}</p>
+    <div id="status" class="status wait">Enviando…</div>
+    <section class="card">
+      <div class="score"><div><b>${g.auto} / ${AUTO_MAX}</b><span>parte automática</span></div><div><b>— / ${FREE_MAX}</b><span>traducción: la revisa la profesora</span></div></div>
+      <table class="ct"><tbody>${perRows}</tbody></table>
+    </section>
+    <div class="btns" style="margin:0 0 16px"><button class="btn" id="resend" style="display:none">Enviar otra vez</button><button class="btn sec" id="pdf">Guardar en PDF</button></div>
+    <section class="card"><h3 style="margin:0 0 6px">Sus respuestas</h3>${sc}</section>
+  </main>`;
+  $('#pdf').onclick=()=>window.print();
+  $('#resend').onclick=()=>send(g);
+  if(st.sent){const b=$('#status');b.className='status ok';b.textContent='✓ Enviado. La profesora ha recibido su trabajo.'}
+}
+
+/* ---------- boot ---------- */
+const saved=store.get();
+if(saved && saved.v && V[saved.v]){
+  st=saved; steps=buildSteps(st.v);
+  if(st.finished) finish(); else { log('Página recargada — se continúa'); run(); }
+} else startScreen();
+})();
+</script>
+</body>
+</html>
